@@ -125,9 +125,9 @@ def evaluate_discovery(discovery_file, args):
 def discover(args):
     sample_sizes = [50, 100, 200, 400, 800, 1600, 3200, 6400]
     sample_sizes += [12800, 25600, 51200, 102400]
-    numrows = 102400
     if args.samples > 0:
         sample_sizes = [args.samples]
+    numrows = max(sample_sizes)
 
     # |   Set Home Directory and Java Directory
     if "CentOS" in platform.freedesktop_os_release()['NAME']:
