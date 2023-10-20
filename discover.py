@@ -22,6 +22,7 @@ class argsClass:
     meta: float = -1.0
     algorithm: str = ''
 
+
 def args2argsClass(args=None):
     if args is None:
         args = process_args()
@@ -144,7 +145,7 @@ def discover(args):
     # determine filename of output of causal-cmd
     discovery_file = jvm_dirname + '/' + discovery_prefix + '.txt'
 
-    # |   Set Truegraph 
+    # |   Set Truegraph
     edges = picause.adjacencystr2pairlist(args.graph)
 
     # |             Create SEM object
@@ -197,7 +198,9 @@ def discover(args):
                     print(pandas.DataFrame(run_results))
                 results_list.append(run_results)
     results = pandas.concat(results_list, ignore_index=True)
-    results.to_csv(jvm_dirname + '/results.gz.csv', index=False, compression='gzip')
+    results.to_csv(jvm_dirname + '/results.gz.csv',
+                   index=False,
+                   compression='gzip')
     os.remove(jvm_dirname + '/data.csv')
 
     # Create filename to signal that entire job completed successfully
@@ -206,7 +209,8 @@ def discover(args):
 
     return results
 
+
 if __name__ == "__main__":
-#   args = process_args()
+    #   args = process_args()
     args = args2argsClass()
     discover(args)
