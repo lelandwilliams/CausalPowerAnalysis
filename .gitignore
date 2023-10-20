@@ -1,0 +1,5 @@
+sim6r1-logs
+sim6r1_errors
+*.log
+.ipynb_checkpoints*
+__pycache__
