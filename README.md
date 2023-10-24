@@ -1,6 +1,6 @@
 # CausalPowerAnalysis
 
-Code to perform causal power analysis from the Kummerfeld, Williams, and Ma (2023) paper, https://link.springer.com/article/10.1007/s41060-023-00399-4.
+Code to perform causal power analysis from the [Kummerfeld, Williams, and Ma (2023) paper](https://link.springer.com/article/10.1007/s41060-023-00399-4.)
 
 We created a set of generating causal graphs, and used them to generate statisticly normal data,
 then tested the pc algorithm to determine the success rates in finding correct links in the correct direction.
@@ -10,7 +10,7 @@ We also assigned a random seed to each generating graph, so that each run with a
 ## Basic Usage
 In a simpler use case, you can test the strength of one run on a given generator graph by typing
 
-`python discover.py nodes r graphnum graph seed index`
+`python discover.py <nodes> <r> <graphnum> <graph> <seed> <index>`
 
 where nodes is the number of nodes in the data strength
 r is the effect size between nodes
