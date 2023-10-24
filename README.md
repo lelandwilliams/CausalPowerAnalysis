@@ -26,7 +26,7 @@ where
    we created our graphs randomly, testing for various quality criteria; sometimes finding a sucessful graph happened quickly, sometimes not-at-all quickly.  
    This caused havok for estimating time requests to the supercomputer, so we created the graphs in a seperate, prior step.   
    Brian Andrews is doing some interesting work on automating graph generation. Look for it soon in your favorite journals.  
-   In the meanwhile, graph supply is left as a exercise for the reader.
+   In the meanwhile, look the section graph generation (below)
 + *seed* is a random seed  
    Storing 500 huge datasets would have required terabytes of disc space.  
    Instead we assigned a seed number to each graph, and used it to generate the data upon request.  
@@ -41,7 +41,7 @@ where
 
 ## Output
 
-The algorithm will output to the directory specified by *index* (see above) a csv detailing, for each run:
+discover.py will output to the directory specified by *index* (see above) a csv detailing, for each run:
 * runtime
 * truegraphid
 * nodes
