@@ -12,12 +12,13 @@ In a simpler use case, you can test the strength of one run on a given generator
 
 `python discover.py <nodes> <r> <graphnum> <graph> <seed> <index>`
 
-where nodes is the number of nodes in the data strength
-r is the effect size between nodes
-graphnum is an identifier for the number of the graph
-graph is a string of the form "a --> b, b --> c " giving the names of the nodes and the causal direction between them.
-seed is a random seed
-index is the directory number.
+where 
++ nodes is the number of nodes in the data strength
++ r is the effect size between nodes
++ graphnum is an identifier for the number of the graph
++ graph is a string of the form "a --> b, b --> c " giving the names of the nodes and the causal direction between them.
++ seed is a random seed
++ index is the directory number.
 
 ## Explanation
 We found that creating the graphs that satisfy our conditions (no incoming variance > 0.9) could be time consuming,
