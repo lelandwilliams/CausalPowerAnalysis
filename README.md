@@ -18,6 +18,10 @@ where
 + graphnum is an identifier for the number of the graph
 + graph is a string of the form "a --> b, b --> c " giving the names of the nodes and the causal direction between them.
 + seed is a random seed
+   Storing 500 huge datasets would have required Terabytes of disc space.  
+   Instead we assigned a seed number to each graph, and used it to generate the data upon request.  
+   Then if a job was interrupted, we could restart at the point of interruption instead of having 
+   to rerun everything on fresh data.
 + index is the directory number.
 
 ## Explanation
