@@ -1,5 +1,5 @@
 # CausalPowerAnalysis
-code to perform causal power analysis from teh Kummerfeld, Williams, and Ma paper.
+code to perform causal power analysis from the Kummerfeld, Williams, and Ma (2023) paper, https://link.springer.com/article/10.1007/s41060-023-00399-4.
 We created a set of generating causal graphs, and used them to generate statisticly normal data,
 then tested the pc algorithm to determine the success rates in finding correct links in the correct direction.
 
