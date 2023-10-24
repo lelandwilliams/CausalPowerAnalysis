@@ -16,16 +16,19 @@ where
 + *nodes* is the number of nodes in the dataset.  
   This number can be larger than the number of nodes that appear in the graph string,  
   but it shouldn't be less.
-+ *r* is the effect size between nodes
-+ *graphnum* is an identifier for the number of the graph
++ *r* is the effect size between nodes  
+  The effect size in this study was the same between each connected pair.
++ *graphnum* is an identifier for the number of the graph  
+  It will be remembered in the output, in case you want to analyze which graphs give your discover algorithm  
+  the hardest time of it.
 + *graph* specifies the generating graph  
    it is given as a  string in the form "a --> b, b --> c " giving the names of the nodes and the causal direction between them.
-   we created our graphs randomly, which sometimes happened quickly, sometimes not-at-all quickly.  
-   This caused havok for estimating time requests to the supercomputer, so we made the graphs seperately.  
-   Brian Andrews is doing some intersting work on automating graph generation. Look for it soon in your favorite journals.  
+   we created our graphs randomly, testing for various quality criteria; sometimes finding a sucessful graph happened quickly, sometimes not-at-all quickly.  
+   This caused havok for estimating time requests to the supercomputer, so we created the graphs in a seperate, prior step.   
+   Brian Andrews is doing some interesting work on automating graph generation. Look for it soon in your favorite journals.  
    In the meanwhile, graph supply is left as a exercise for the reader.
 + *seed* is a random seed  
-   Storing 500 huge datasets would have required Terabytes of disc space.  
+   Storing 500 huge datasets would have required terabytes of disc space.  
    Instead we assigned a seed number to each graph, and used it to generate the data upon request.  
    Then if a job was interrupted, we could restart at the point of interruption instead of having 
    to rerun everything on fresh data.
@@ -36,6 +39,21 @@ where
    Using multiple directories allowed for running multiple directories at the whim of the supercomputer's  
    scheduler, allowed for finer grained monitoring of job completion, and gave a place to seperate java config files.
 
-## Explanation
-We found that creating the graphs that satisfy our conditions (no incoming variance > 0.9) could be time consuming,
-so we created the graphs first. We also specified a random seed used in generating the fake data from the graph.
+## Output
+
+The algorithm will output to the directory specified by *index* (see above) a csv detailing, for each run:
+* runtime
+* truegraphid
+* nodes
+* edges
+* metaparameter {sent to the causal discovery algorithm}
+* r {the effect size}
+* samples
+* skeletal_TP {skeletal means edges found without regard to direction. TP is true positives}
+* skeletal_FP
+* skeletal_FN
+* skeletal_TN
+* oriented_TP {oriented means edges found and oriented correctly. See the paper for details}
+* oriented_FP
+* oriented_FN
+* algorithm
