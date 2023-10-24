@@ -21,7 +21,7 @@ where
 + <graph> specifies the generating graph  
    it is given as a  string in the form "a --> b, b --> c " giving the names of the nodes and the causal direction between them.
    we created our graphs randomly, which sometimes happened quickly, sometimes not-at-all quickly.  
-   This caused havok for estimating time requests to the supercomputer, so we made the graphs seperately.
+   This caused havok for estimating time requests to the supercomputer, so we made the graphs seperately.  
    Brian Andrews is doing some intersting work on automating graph generation. Look for it soon in your favorite journals.  
    In the meanwhile, graph supply is left as a exercise for the reader.
 + <seed> is a random seed  
@@ -34,7 +34,7 @@ where
    The form of the name is 'dirx' for x is the index above.
    This directory will contain the job output. 
    Using multiple directories allowed for running multiple directories at the whim of the supercomputer's  
-   scheduler, allowed for finer grained monitoring of job completion, and gave a place to seperate java config files..
+   scheduler, allowed for finer grained monitoring of job completion, and gave a place to seperate java config files.
 
 ## Explanation
 We found that creating the graphs that satisfy our conditions (no incoming variance > 0.9) could be time consuming,
