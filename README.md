@@ -10,9 +10,11 @@ We also assigned a random seed to each generating graph, so that each run with a
 ## Single Runs
 
 The easiest way is to create an  instance of the StructuralEquationDagModel class, found in picause.py.
-`In [1]: from picause import StructuralEquationDagModel
+```
+In [1]: from picause import StructuralEquationDagModel
 
-In [2]: model = StructuralEquationDagModel(num_var=15, num_edges=27)`
+In [2]: model = StructuralEquationDagModel(num_var=15, num_edges=27)
+```
 
 
 ## Batch Runs
