@@ -7,7 +7,17 @@ then tested the pc algorithm to determine the success rates in finding correct l
 
 We also assigned a random seed to each generating graph, so that each run with a given graph would use the same data.
 
-## Basic Usage
+## Single Runs
+
+The easiest way is to create an  instance of the StructuralEquationDagModel class, found in picause.py.
+`In [1]: from picause import StructuralEquationDagModel
+
+In [2]: model = StructuralEquationDagModel(num_var=15, num_edges=27)`
+
+
+## Batch Runs
+
+### Usage
 In a simpler use case, you can test the strength of one run on a given generator graph by typing
 
 `python discover.py <nodes> <r> <graphnum> <graph> <seed> <index>`
