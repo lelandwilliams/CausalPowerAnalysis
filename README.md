@@ -13,13 +13,15 @@ The easiest way is to create an  instance of the StructuralEquationDagModel clas
 ```
 In [1]: from picause import StructuralEquationDagModel
 
-In [2]: model = StructuralEquationDagModel(num_var=15, num_edges=27)
+In [2]: sem = StructuralEquationDagModel(num_var=15, num_edges=27)
 ```
+
+by default, sem now contains a randomly generated causal graph with a uniform effect size of 0.1.
+  In order to change the effect size, add the parameter beta = (the _square root_ of the desired effect size).
 
 
 ## Batch Runs
 
-### Usage
 In a simpler use case, you can test the strength of one run on a given generator graph by typing
 
 `python discover.py <nodes> <r> <graphnum> <graph> <seed> <index>`
