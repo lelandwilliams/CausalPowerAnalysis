@@ -1,7 +1,8 @@
 # CausalPowerAnalysis
 
 Code to perform causal power analysis from the [Kummerfeld, Williams, and Ma (2023) paper](https://link.springer.com/article/10.1007/s41060-023-00399-4.).
-  Uses causal-cmd from the [Center for Causal Discovery](ccd.pitt.edu).
+  
+Uses causal-cmd from the [Center for Causal Discovery](ccd.pitt.edu).
 
 We created a set of generating causal graphs, and used them to generate statisticly normal data,
 then tested the pc algorithm to determine the success rates in finding correct links in the correct direction.
