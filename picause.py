@@ -137,27 +137,17 @@ def pairlist2arrowstr(E, human_readable=False):
 
 
 def discover(df_filename, o_filename, jdir=None, meta=0.1, algorithm='pc',
-             output_directory=None, verbose=False):
+             output_directory=None, jar_dir="", verbose=False):
     # Determine directory location of jar file
-    if "CentOS" in platform.freedesktop_os_release()['NAME']:
-        basedir = "/home/erichk/will4379/Picause/"
-    elif 'Projects' in os.listdir('/home/lhw'):
-        basedir = "/home/lhw/Projects/Picause/"
-    elif 'Work' in os.listdir('/home/lhw'):
-        basedir = "/home/lhw/Work/Picause/"
-    elif 'Picause' in os.listdir('/home/lhw'):
-        basedir = "/home/lhw/Picause/"
-    else:
-        raise RuntimeError('Cannot find jar file')
 
     javajar = 'causal-cmd-1.4.1-SNAPSHOT-jar-with-dependencies.jar'
 
     # Create directories to contain JVM settings files
     if jdir is None:
-        java_base_cmd = 'java -jar ' + basedir + javajar
+        java_base_cmd = 'java -jar ' + jar_dir + javajar
     else:
         dir_opt = "-Djava.util.prefs.userRoot={} -Djava.util.prefs.systemRoot={}".format(jdir,jdir)
-        java_base_cmd = 'java ' + dir_opt + ' -jar ' + basedir + javajar
+        java_base_cmd = 'java ' + dir_opt + ' -jar ' + jar_dir + javajar
 
     # Build options to send to causal-cmd
     java_opts = " --algorithm {} ".format(algorithm)
@@ -195,21 +185,24 @@ def discover(df_filename, o_filename, jdir=None, meta=0.1, algorithm='pc',
 
     return java_output
 
+
 def discovery_results(sem, datafile, jdir=None, meta=0.1, dgraphfile="", write=True, algorithm='pc', output_directory=None, output_prefix=None):
     """
     runs a causal discovery algorithm on a datafile, saves the discovered graph, and returns a confusion matrix
-    
+
     parameters:
     ----------
         sem: a picause.StructuredEquationDagModel class
-            ** Warning, sem actually does nothing and is to be removed **
-        datafile: the csv file containing the observations from which graphs are inferred
+            ** Warning, sem actually does nothing may be removed **
+        datafile: the csv file containing the observations from which graphs
+            are inferred
         jdir: the directory the jvm should use for its userPrefs file
         meta: the metaparameter relavant to the specified algorithm
         dgraphfile: the file the discovered graph should be saved under
         write: whether or not the algorithm should save the discovered graph
         algorithm: which algorithm to ask discover() to use
-        output_directory: the path to the directory where the output file shall be placed
+        output_directory: the path to the directory where the output file shall
+            be placed
         output_prefix: the name of the output file (not including the .txt)
 
     returns:
@@ -354,28 +347,29 @@ class Model:
         self.seed = seed
         self.E = E
         self.V = V
-        
+
         if self.seed is None:
             self.seed = int(os.urandom(sys.getsizeof(int())).hex(), 16)
         self.rng = numpy.random.default_rng(self.seed)
-        
+
         if self.E is not None and self.V is None and num_var is None:
             self.V = sorted(set([v for x in E for v in x]))
         if self.V is None:
             self.V = ["x_{}".format(i) for i in range(1, num_var + 1)]
+
 
 class StructuralEquationDagModel(Model):
     def __init__(self, num_var=None, V=None, E=None, seed=None, num_edges=None, make_model=True, beta=math.sqrt(0.1)):
         super().__init__(num_var=num_var, V=V, E=E, seed=seed, num_edges=num_edges)
         if self.E is None and not self.V is None:
             self.E = self.make_random_graph(self.V, rng=self.rng, num_edges=num_edges)
-            
+
         if make_model:
             self.make_implied_model(beta=beta)
-            
+
     def __repr__(self):
         return str(self)
-    
+
     def __str__(self):
         s = "Structural Equation DAG Model\n"
         s += "{} Vertices and {} Edges\n".format(len(self.V), len(self.E))
@@ -383,19 +377,19 @@ class StructuralEquationDagModel(Model):
         s += "Vertices:\n"
         s += str(self.V)
         s += "\n\n"
-        s += "Edges:\n" 
+        s += "Edges:\n"
         s += pairlist2arrowstr(self.E, human_readable=True)
         s += "\nTopological Order:\n\t"
         s += self.get_topological_order(as_string=True)
         s += "\nModel:\n\t:"
         s += self.get_model_str()
         return s
-   
+
     def set_E(self, new_E):
         self.E = new_E
         self.num_edges = len(new_E)
         self.make_sem_im()
-        
+
     def get_model_str(self):
         s = ""
         for var in self.get_topological_order():
@@ -404,7 +398,7 @@ class StructuralEquationDagModel(Model):
                 s += "({:1.3f}) {} + ".format(coef, parent)
             s += "({:1.3f})e\n".format(self.residual[var])
         return s
-                
+
     def generate_data(self, num_data_points=100):
         df = pandas.DataFrame()
         for var in self.residual:
@@ -412,8 +406,7 @@ class StructuralEquationDagModel(Model):
             for parent in self.model[var]:
                 df[var] += self.model[var][parent] * df[parent]
         return df[self.V]
-        
-   
+
     def get_topological_order(self, model=None, as_string=False):
         """
         Using the parent info in the model, determine the 'topological' order of the nodes.
@@ -485,13 +478,13 @@ class StructuralEquationDagModel(Model):
                 parent_matrix.loc[parent, :] *= self.model[variable][parent]
                 parent_matrix.loc[:, parent] *= self.model[variable][parent]
             self.residual[variable] = 1 - parent_matrix.sum().sum()
-            
+
     def make_sem_pm(self):
         """
             creates the dicitonary data structure for a parametric model
             Does not assign edge weights
         """
-        self.model = {v:{} for v in self.V}
+        self.model = {v: {} for v in self.V}
         for parent, node in self.E:
             self.model[node][parent] = None
 
@@ -504,37 +497,35 @@ class StructuralEquationDagModel(Model):
         for node, parents in self.model.items():
             for parent in parents.keys():
                 self.model[node][parent] = beta
-                
+
     def test_residual_overflow(self):
         return min(self.residual.values()) < 0
-    
+
     def make_random_graph(self, V=None, avg_deg=2.0, num_edges=None, rng=None):
-        
-        """ Given a list of vertices, return a list of pairs representing a set of directed edges """
+        """ Given a list of vertices, return a list of pairs representing
+            a set of directed edges """
         if V is None:
             V = self.V
         if rng is None:
             rng = numpy.random.default_rng()
         V_canonical = V.copy()
         rng.shuffle(V_canonical)
-        indegrees = {v:0 for v in V}
+        indegrees = {v: 0 for v in V}
         if num_edges is None:
             num_edges = int(len(V) * avg_deg)
-        
+
         graph_done = False
         while not graph_done:
             graph_done = True
-            indegrees = {v:0 for v in V}
+            indegrees = {v: 0 for v in V}
             possibles = []
-            for i in range(0, len(V_canonical) -1):
+            for i in range(0, len(V_canonical) - 1):
                 for j in range(i+1, len(V_canonical)):
                     possibles.append((V_canonical[i], V_canonical[j]))
             E = random.sample(possibles, num_edges)
-            for u,v in E:
-                indegrees[v] +=1
+            for u, v in E:
+                indegrees[v] += 1
                 if indegrees[v] > 9:
                     graph_done = False
-                    
+
         return E
-
-
