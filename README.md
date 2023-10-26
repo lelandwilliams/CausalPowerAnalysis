@@ -16,13 +16,30 @@ In [1]: from picause import StructuralEquationDagModel
 In [2]: sem = StructuralEquationDagModel(num_var=15, num_edges=27)
 ```
 
-by default, sem now contains a randomly generated causal graph with a uniform effect size of 0.1.
+By default, sem now contains a randomly-generated causal graph with a uniform effect size of 0.1.
   In order to change the effect size, add the parameter beta = (the _square root_ of the desired effect size).
+  
+### Graph Integrity
 
+So far there is no guarantee that the generated graph meets the desired constraints, which in our simulation were that
+  each node would have a minimum independent random error of variance 0.1.
+  
+In order to test if that condition is violated, use the command:
+```
+In [3]: sem.test_residual_overflow()
+Out[3]: False
+```
+
+In this case False means that the graph meets the conditions.
+If True, then create additional instances of StructuralEquationDagModel until successful.
+
+
+### 
 
 ## Batch Runs
 
-In a simpler use case, you can test the strength of one run on a given generator graph by typing
+When conducting a much larger number of runs, try using the discovery.py file.
+ This method allows for greater parallelization, and testing various prameters on the same, pre-created generating graphs.
 
 `python discover.py <nodes> <r> <graphnum> <graph> <seed> <index>`
 
