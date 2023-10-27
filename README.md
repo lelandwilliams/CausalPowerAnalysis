@@ -94,7 +94,7 @@ where
    it is given as a  string in the form "a --> b, b --> c " giving the names of the nodes and the causal direction between them.
    we created our graphs randomly, testing for various quality criteria; sometimes finding a sucessful graph happened quickly, sometimes not-at-all quickly.  
    This caused havok for estimating time requests to the supercomputer, so we created the graphs in a seperate, prior step.   
-   Brian Andrews is doing some interesting work on automating graph generation. Look for it soon in your favorite journals.  
+   Bryan Andrews is doing some interesting work on automating graph generation. Look for it soon in your favorite journals.  
    In the meanwhile, look the section graph generation (below)
 + *seed* is a random seed  
    Storing 500 huge datasets would have required terabytes of disc space.  
