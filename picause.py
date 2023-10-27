@@ -6,10 +6,8 @@ import math
 import numpy
 import os
 import pandas
-import platform
 import random
 import sys
-import time
 import textwrap
 
 
@@ -188,7 +186,8 @@ def discover(df_filename, o_filename, jdir=None, meta=0.1, algorithm='pc',
 
 def discovery_results(sem, datafile, jdir=None, meta=0.1, dgraphfile="", write=True, algorithm='pc', output_directory=None, output_prefix=None):
     """
-    runs a causal discovery algorithm on a datafile, saves the discovered graph, and returns a confusion matrix
+    runs a causal discovery algorithm on a datafile,
+    saves the discovered graph, and returns a confusion matrix
 
     parameters:
     ----------
