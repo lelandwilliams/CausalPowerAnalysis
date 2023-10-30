@@ -74,6 +74,18 @@ x_1 --> x_8, x_10 --> x_5, x_10 --> x_8, x_11 --> x_4, x_12 --> x_5, x_13 --> x_
 
 ```
 
+### Results evaluation
+```
+In [11]: from picause import confusion_matrix, oriented_confusion_matrix, pairlist2arrowstr
+
+In [12]: confusion_matrix(len(sem.V), sem.E, arrowstr2pairlist(results))
+Out[12]: (5, 13, 22, 65)
+
+In [13]: oriented_confusion_matrix(pairlist2arrowstr(sem.E), results)
+Out[.29]: {'oriented_TP': 3, 'oriented_FP': 2, 'oriented_FN': 2}
+
+```
+
 ## Batch Runs
 
 When conducting a much larger number of runs, try using the discovery.py file.
