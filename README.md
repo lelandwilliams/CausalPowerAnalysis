@@ -76,15 +76,18 @@ x_1 --> x_8, x_10 --> x_5, x_10 --> x_8, x_11 --> x_4, x_12 --> x_5, x_13 --> x_
 
 ### Results evaluation
 ```
-In [11]: from picause import confusion_matrix, oriented_confusion_matrix, pairlist2arrowstr
+In [11]: from picause import confusion_matrix, oriented_confusion_matrix, pairlist2arrowstr, arrowstr2pairlist
 
 In [12]: confusion_matrix(len(sem.V), sem.E, arrowstr2pairlist(results))
 Out[12]: (5, 13, 22, 65)
 
 In [13]: oriented_confusion_matrix(pairlist2arrowstr(sem.E), results)
 Out[.29]: {'oriented_TP': 3, 'oriented_FP': 2, 'oriented_FN': 2}
-
 ```
+
+The basic results are in the form of confusion matrices.
+confusion_matrix returns a four-tuple in the expected format of (TP, FP, TN, PN)
+oriented_confusion_matrix, as define in the paper, returns a dictionary.
 
 ## Batch Runs
 
