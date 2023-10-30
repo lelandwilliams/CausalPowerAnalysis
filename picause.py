@@ -99,9 +99,10 @@ def arrowstr2pairlist(s):
         s = s[:-1]
     if len(s.split()) == 0:
         return []
-    if len(s.split()) == 1:  # handles the case that there is only one pair,
-                             # in which case there is no comma, which would
-                             # cause errors in the final case.
+    if len(s.split()) == 1:
+        # handles the case that there is only one pair,
+        # in which case there is no comma, which would
+        # cause errors in the final case.
         return (s.split()[0], s.split()[2])
     return [(x.split()[0], x.split()[2]) for x in s.split(',')]
 
