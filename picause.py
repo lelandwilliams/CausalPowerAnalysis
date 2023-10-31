@@ -17,10 +17,10 @@ def adjacencystr2arrowstr(adjacencystr, directed=True):
         astr = '---'
     s = ""
 
-    for l in adjacencystr.split(';'):
-        if len(l) == 0:
+    for substr in adjacencystr.split(';'):
+        if len(substr) == 0:
             continue
-        hexstrs = textwrap.wrap(l, 2)
+        hexstrs = textwrap.wrap(substr, 2)
         source = "x_{}".format(int("0x"+hexstrs[0], 0))
         for h in hexstrs[1:]:
             dest = "x_{}".format(int("0x"+h, 0))
@@ -78,13 +78,15 @@ def arrowstr2adjacencydict(arrowstr, directed=True):
 
     d = dict()
     astr = '-->'
-    if not directed: astr = '---'
+    if not directed:
+        astr = '---'
 
     for pair in arrowstr.split(','):
         if astr not in pair:
             continue
         u, _, v = pair.strip().split()
-        if u not in d: d[u] = []
+        if u not in d:
+            d[u] = []
         d[u].append(v)
     return d
 
@@ -145,7 +147,8 @@ def discover(df_filename, o_filename, jdir=None, meta=0.1, algorithm='pc',
     if jdir is None:
         java_base_cmd = 'java -jar ' + jar_dir + javajar
     else:
-        dir_opt = "-Djava.util.prefs.userRoot={} -Djava.util.prefs.systemRoot={}".format(jdir,jdir)
+        dir_opt = "-Djava.util.prefs.userRoot={} ".format(jdir)
+        dir_opt += "-Djava.util.prefs.systemRoot={}".format(jdir)
         java_base_cmd = 'java ' + dir_opt + ' -jar ' + jar_dir + javajar
 
     # Build options to send to causal-cmd
@@ -185,7 +188,9 @@ def discover(df_filename, o_filename, jdir=None, meta=0.1, algorithm='pc',
     return java_output
 
 
-def discovery_results(sem, datafile, jdir=None, meta=0.1, dgraphfile="", write=True, algorithm='pc', output_directory=None, output_prefix=None):
+def discovery_results(sem, datafile, jdir=None, meta=0.1, dgraphfile="",
+                      write=True, algorithm='pc', output_directory=None,
+                      output_prefix=None):
     """
     runs a causal discovery algorithm on a datafile,
     saves the discovered graph, and returns a confusion matrix
@@ -215,7 +220,8 @@ def discovery_results(sem, datafile, jdir=None, meta=0.1, dgraphfile="", write=T
     outfile = "{}/{}.txt".format(output_directory, output_prefix)
     print(outfile)
     # run the discovery algorithm
-    data = discover(datafile, output_prefix, jdir=jdir, meta=meta, algorithm=algorithm, output_directory=output_directory)
+    _ = discover(datafile, output_prefix, jdir=jdir, meta=meta,
+                 algorithm=algorithm, output_directory=output_directory)
 #   print(data)
     with open(outfile, 'r') as f:
         results = f.readlines()
@@ -328,6 +334,7 @@ def confusion_matrix(num_nodes, true_e, test_e):
 
     return tuple(M)
 
+
 def int2pairlist(i, len_V):
     if len_V == 20:
         M = numpy.array(list(format(bin(i), "0400b")),dtype=numpy.uint8).reshape(20,20)
@@ -343,7 +350,8 @@ def int2pairlist(i, len_V):
 
 
 class Model:
-    def __init__(self, num_var=None, V=None, E=None, seed=None, num_edges=None):
+    def __init__(self, num_var=None, V=None, E=None,
+                 seed=None, num_edges=None):
         self.seed = seed
         self.E = E
         self.V = V
@@ -359,10 +367,13 @@ class Model:
 
 
 class StructuralEquationDagModel(Model):
-    def __init__(self, num_var=None, V=None, E=None, seed=None, num_edges=None, make_model=True, beta=math.sqrt(0.1)):
-        super().__init__(num_var=num_var, V=V, E=E, seed=seed, num_edges=num_edges)
-        if self.E is None and not self.V is None:
-            self.E = self.make_random_graph(self.V, rng=self.rng, num_edges=num_edges)
+    def __init__(self, num_var=None, V=None, E=None, seed=None, num_edges=None,
+                 make_model=True, beta=math.sqrt(0.1)):
+        super().__init__(num_var=num_var, V=V, E=E,
+                         seed=seed, num_edges=num_edges)
+        if self.E is None and self.V is not None:
+            self.E = self.make_random_graph(self.V, rng=self.rng,
+                                            num_edges=num_edges)
 
         if make_model:
             self.make_implied_model(beta=beta)
@@ -402,16 +413,18 @@ class StructuralEquationDagModel(Model):
     def generate_data(self, num_data_points=100):
         df = pandas.DataFrame()
         for var in self.residual:
-            df[var] = self.rng.normal(0, math.sqrt(self.residual[var]), num_data_points)
+            df[var] = self.rng.normal(0, math.sqrt(self.residual[var]),
+                                      num_data_points)
             for parent in self.model[var]:
                 df[var] += self.model[var][parent] * df[parent]
         return df[self.V]
 
     def get_topological_order(self, model=None, as_string=False):
         """
-        Using the parent info in the model, determine the 'topological' order of the nodes.
-        A Topolocial ordering is a (potentially nonunique) ordering where no later node
-        can be a parent of an earlier node.
+        Using the parent info in the model, discern the 'topological' order
+        of the nodes.
+        ((A Topolocial ordering is a (potentially nonunique) ordering where no
+          later node can be a parent of an earlier node.))
         """
         if model is None:
             model = self.model
@@ -427,20 +440,21 @@ class StructuralEquationDagModel(Model):
             for v in var_order:
                 if v in remaining_vars:
                     remaining_vars.remove(v)
-                    
+
         if as_string:
             s = ""
             for v in var_order:
                 s += v
-                if var_order.index(v) < len(var_order) -1:
+                if var_order.index(v) < len(var_order) - 1:
                     s += " < "
             return s
         else:
             return var_order
-    
+
     def make_cov_matrix(self, verbose=False):
         variables = self.get_topological_order()
-        cov_matrix = pandas.DataFrame(numpy.identity(len(self.V)), index=variables, columns=variables)
+        cov_matrix = pandas.DataFrame(numpy.identity(len(self.V)),
+                                      index=variables, columns=variables)
 
         for u in variables[1:]:
             parents_u = self.model[u]
@@ -457,17 +471,18 @@ class StructuralEquationDagModel(Model):
             print('Heres the implied covariance matrix:')
             print(cov_matrix)
             print()
-        
+
         return cov_matrix
-    
+
     def make_implied_model(self, beta):
-        self.make_sem_im(beta=beta) #instantiates self.model
+        self.make_sem_im(beta=beta)
         self.implied_cov_matrix = self.make_cov_matrix()
         self.make_residuals(self.implied_cov_matrix)
-        
+
     def make_residuals(self, M, verbose=True):
-        """ 
-        creates the class member residual, a dictionary of variables and their residual, or "leftover", or "free", variance
+        """
+        creates the class member residual, a dictionary of variables
+        and their residual, or "leftover", or "free", variance
         """
         self.residual = {}
         variable_order = self.get_topological_order(self.model)
