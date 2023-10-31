@@ -139,7 +139,41 @@ def pairlist2arrowstr(E, human_readable=False):
 
 def discover(df_filename, o_filename, jdir=None, meta=0.1, algorithm='pc',
              output_directory=None, jar_dir="", verbose=False):
-    # Determine directory location of jar file
+    """
+    builds a command-line call to the causal-cmd jar.
+
+    parameters:
+    ----------
+        df_filename: the filename of csv to run discovery upon
+        o_filename: the filename to save the output from causal-cmd to
+        jdir: the directory in which to use as 'home' when running java
+            Important when potentially running multiple simulatneous calls
+            as the jvm creates config files in home that prevent simultaneous
+            runs.
+            As a workaround, create a directory for each call, and feed that
+            directory to this function as jdir.
+        meta: a metapareter of the selected discovery algorithm.
+            Which metaparameter it is depends on the algorithm:
+                The grasp algorithm ignores it.
+                The pc algorithm uses it for alpha.
+                The unnamed fges algorithm uses it for penaltyDiscount.
+        algorithm: which discovery algorithm to use.
+            grasp and pc are strongly supported.
+            fges should work
+            others may work.
+            TODO: enforce algorithm choice.
+        output_directory: specifies into which directory the results file
+            should be saved.
+            important when conducting parallel runs.
+        jar_dir: the directory in which the jar file can be found.
+        verbose: outputs the constructed command-line java call to the screen.
+            useful for development.
+
+
+    returns:
+    -------
+        any output from the command-line java call
+    """
 
     javajar = 'causal-cmd-1.4.1-SNAPSHOT-jar-with-dependencies.jar'
 
@@ -193,7 +227,8 @@ def discovery_results(sem, datafile, jdir=None, meta=0.1, dgraphfile="",
                       output_prefix=None):
     """
     runs a causal discovery algorithm on a datafile,
-    saves the discovered graph, and returns a confusion matrix
+    saves the discovered graph, and returns a the discovered graph in
+    arrow-string format.
 
     parameters:
     ----------
