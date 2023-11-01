@@ -12,6 +12,21 @@ import textwrap
 
 
 def adjacencystr2arrowstr(adjacencystr, directed=True):
+    """
+    Takes an adjacency string and returns an arrow string
+    An adjacency string is a string encoding of an adjacency list.
+    Instead of source: dest1 dest2 dest3
+    like an adjacnecy list, an adjacency string looks like:
+        ss:d1d2d3 (note all nodes have only two character labels)
+        and each list is seperated by a semicolon.
+
+    parameters:
+    ----------
+        adjacencystr: a string in the above format
+        directed: a boolen. True indicates the edges should be
+            interpreted as directed.
+            False indicates undirected.
+    """
     astr = '-->'
     if not directed:
         astr = '---'
@@ -29,6 +44,26 @@ def adjacencystr2arrowstr(adjacencystr, directed=True):
 
 
 def adjacencystr2pairlist(adjacencystr):
+    """
+    A convenience method to convert an adjacency string
+        into an edge list
+    An adjacency string has the form xxyyzz;aabbcc...
+    where xx and aa are sources, and yy and zz (etc) are the destinations
+    and xx and yy are two-hexdigit numbers
+    the semicolon is the delimiter between adjacencylines
+
+    an edge list is a list of pairs, with the entries in the pairs being
+    the endpoint vertices of each edge.
+
+
+    parameters:
+    ----------
+        adjacencystr: the adjacency string
+
+    returns:
+    ----------
+        a list of pairs
+    """
     arrowstr = adjacencystr2arrowstr(adjacencystr)
     return arrowstr2pairlist(arrowstr)
 
@@ -92,8 +127,13 @@ def arrowstr2adjacencydict(arrowstr, directed=True):
 
 
 def arrowstr2pairlist(s):
-    """ takes a string of edges in Tetrad's format and
-    return a list of edge pairs"""
+    """
+    Takes an arrow string, in the form of u1 --> v1, u2 --- v2, ...
+
+    reurns an edge list
+    an edge list is a list of pairs, with the entries in the pairs being
+    the endpoint vertices of each edge.
+    """
     if len(s) == 0:
         return []
     s = s.strip()
@@ -113,6 +153,9 @@ def pairlist2arrowstr(E, human_readable=False):
     """ obtain an string of directed edges from an interable of vertice pairs
         it assumes that a pair (u,v) denotes a directed edge from u to v.
 
+        used to make string representations of an StructuralEquationDagModel
+        object.
+
     params:
     ______
         E: an iterable containing (u,v) pairs
@@ -120,7 +163,8 @@ def pairlist2arrowstr(E, human_readable=False):
 
     output:
     _______
-        a Tetrad style u --->v string """
+        a Tetrad style u --->v string
+    """
     if human_readable:
         s = ""
         count = 0
@@ -257,7 +301,6 @@ def discovery_results(sem, datafile, jdir=None, meta=0.1, dgraphfile="",
     # run the discovery algorithm
     _ = discover(datafile, output_prefix, jdir=jdir, meta=meta,
                  algorithm=algorithm, output_directory=output_directory)
-#   print(data)
     with open(outfile, 'r') as f:
         results = f.readlines()
     results_s = ""
